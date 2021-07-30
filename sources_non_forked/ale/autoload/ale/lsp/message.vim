@@ -28,14 +28,13 @@ function! ale#lsp#message#GetNextVersionID() abort
     return l:id
 endfunction
 
-function! ale#lsp#message#Initialize(root_path, initialization_options) abort
-    " TODO: Define needed capabilities.
+function! ale#lsp#message#Initialize(root_path, options, capabilities) abort
     " NOTE: rootPath is deprecated in favour of rootUri
     return [0, 'initialize', {
     \   'processId': getpid(),
     \   'rootPath': a:root_path,
-    \   'capabilities': {},
-    \   'initializationOptions': a:initialization_options,
+    \   'capabilities': a:capabilities,
+    \   'initializationOptions': a:options,
     \   'rootUri': ale#path#ToURI(a:root_path),
     \}]
 endfunction
@@ -161,5 +160,37 @@ endfunction
 function! ale#lsp#message#DidChangeConfiguration(buffer, config) abort
     return [1, 'workspace/didChangeConfiguration', {
     \   'settings': a:config,
+    \}]
+endfunction
+
+function! ale#lsp#message#Rename(buffer, line, column, new_name) abort
+    return [0, 'textDocument/rename', {
+    \   'textDocument': {
+    \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
+    \   },
+    \   'position': {'line': a:line - 1, 'character': a:column - 1},
+    \   'newName': a:new_name,
+    \}]
+endfunction
+
+function! ale#lsp#message#CodeAction(buffer, line, column, end_line, end_column, diagnostics) abort
+    return [0, 'textDocument/codeAction', {
+    \   'textDocument': {
+    \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
+    \   },
+    \   'range': {
+    \       'start': {'line': a:line - 1, 'character': a:column - 1},
+    \       'end': {'line': a:end_line - 1, 'character': a:end_column},
+    \   },
+    \   'context': {
+    \       'diagnostics': a:diagnostics
+    \   },
+    \}]
+endfunction
+
+function! ale#lsp#message#ExecuteCommand(command, arguments) abort
+    return [0, 'workspace/executeCommand', {
+    \   'command': a:command,
+    \   'arguments': a:arguments,
     \}]
 endfunction
