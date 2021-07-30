@@ -29,7 +29,8 @@ set guioptions-=L
 
 " Colorscheme
 set background=dark
-colorscheme peaksea
+execute pathogen#infect()
+colorscheme gruvbox
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

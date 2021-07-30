@@ -51,8 +51,12 @@ nmap <leader>w :w!<cr>
 " (useful for handling the permission-denied error)
 command W w !sudo tee % > /dev/null
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" turn tabs into spaces
+set expandtab
+set tabstop=4
+retab
+set shiftwidth=4
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set 7 lines to the cursor - when moving vertically using j/k
